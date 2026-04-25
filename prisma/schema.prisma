@@ -1,0 +1,33 @@
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+// Tabela de Usuários (Funcionários, Gestores, Admin)
+model Usuario {
+  id        Int      @id @default(autoincrement())
+  nome      String
+  login     String   @unique
+  senha     String
+  funcao    String   // Admin, Gestor, Funcionario
+  status    Boolean  @default(true) // Ativo/Inativo
+  tarefas   Tarefa[] // Relação 1:N (Um usuário pode ter várias tarefas)
+}
+
+// Tabela de Tarefas da Pousada
+model Tarefa {
+  id           Int      @id @default(autoincrement())
+  titulo       String
+  descricao    String?
+  local        String
+  prioridade   String   // Baixa, Media, Alta
+  status       String   @default("Atribuida") // Atribuida, Em andamento, Concluida
+  dataInicio   DateTime @default(now())
+  dataFim      DateTime?
+  responsavel  Usuario  @relation(fields: [usuarioId], references: [id])
+  usuarioId    Int
+}

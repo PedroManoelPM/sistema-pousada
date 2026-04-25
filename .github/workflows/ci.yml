@@ -22,5 +22,10 @@ jobs:
       - name: Instalar dependências
         run: npm install
 
+      - name: Gerar Cliente Prisma
+        run: npx prisma generate
+
       - name: Rodar Testes
-        run: npm test || echo "Ainda não temos testes, mas o robô funcionou!"
+        run: npm test || echo "Testando!"
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
